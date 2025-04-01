@@ -174,9 +174,9 @@ app_include_js = "/assets/sync_app/js/sync_buttons.js"
 # }
 scheduler_events = {
     "hourly": [
-        "sync_app.api.sync_all('Sales Invoice')",
-        "sync_app.api.sync_all('POS Opening Shift')",
-        "sync_app.api.sync_all('POS Closing Shift')"
+        "sync_app.sync_app.api.sync_all('Sales Invoice')",
+        "sync_app.sync_app.api.sync_all('POS Opening Shift')",
+        "sync_app.sync_app.api.sync_all('POS Closing Shift')"
 	],
 }
 
