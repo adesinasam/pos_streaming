@@ -37,6 +37,7 @@ def sync_record(doctype, record_name):
     except Exception as e:
         return f"Error syncing {doctype}: {record_name} - {str(e)}"
 
+@frappe.whitelist()
 def sync_all(doctype):
     """Sync all unsynced records for the given doctype."""
     unsynced_records = get_unsynced_records(doctype)
