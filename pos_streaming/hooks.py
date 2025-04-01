@@ -161,9 +161,7 @@ app_include_js = "/assets/pos_streaming/js/sync_buttons.js"
 # 		"pos_streaming.tasks.daily"
 #  	],
 #     "hourly": [
-#         "pos_streaming.api.sync_all('Sales Invoice')",
-#         "pos_streaming.api.sync_all('POS Opening Shift')",
-#         "pos_streaming.api.sync_all('POS Closing Shift')"
+# 		"pos_streaming.tasks.hourly"
 # 	],
 #  	"weekly": [
 # 		"pos_streaming.tasks.weekly"
@@ -174,10 +172,8 @@ app_include_js = "/assets/pos_streaming/js/sync_buttons.js"
 # }
 scheduler_events = {
     "hourly": [
-        "pos_streaming.pos_streaming.api.sync_all('Sales Invoice')",
-        "pos_streaming.pos_streaming.api.sync_all('POS Opening Shift')",
-        "pos_streaming.pos_streaming.api.sync_all('POS Closing Shift')"
-	],
+        "pos_streaming.pos_streaming.api.sync_all"
+    ]
 }
 
 
