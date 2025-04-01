@@ -44,9 +44,14 @@ app_license = "mit"
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+# doctype_list_js = {
+#     "Sales Invoice": "public/js/sales_invoice.js",
+#     "Purchase Invoice": "public/js/purchase_invoice.js",
+# 	}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
+app_include_js = "/assets/sync_app/js/sync_buttons.js"
+
 
 # Svg Icons
 # ------------------
@@ -154,17 +159,27 @@ app_license = "mit"
 # 	],
 # 	"daily": [
 # 		"pos_streaming.tasks.daily"
+#  	],
+#     "hourly": [
+#         "sync_app.api.sync_all('Sales Invoice')",
+#         "sync_app.api.sync_all('POS Opening Shift')",
+#         "sync_app.api.sync_all('POS Closing Shift')"
 # 	],
-# 	"hourly": [
-# 		"pos_streaming.tasks.hourly"
-# 	],
-# 	"weekly": [
+#  	"weekly": [
 # 		"pos_streaming.tasks.weekly"
 # 	],
 # 	"monthly": [
 # 		"pos_streaming.tasks.monthly"
 # 	],
 # }
+scheduler_events = {
+    "hourly": [
+        "sync_app.api.sync_all('Sales Invoice')",
+        "sync_app.api.sync_all('POS Opening Shift')",
+        "sync_app.api.sync_all('POS Closing Shift')"
+	],
+}
+
 
 # Testing
 # -------
