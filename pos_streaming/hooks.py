@@ -50,7 +50,7 @@ app_license = "mit"
 # 	}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
-app_include_js = "/assets/sync_app/js/sync_buttons.js"
+app_include_js = "/assets/pos_streaming/js/sync_buttons.js"
 
 
 # Svg Icons
@@ -161,9 +161,9 @@ app_include_js = "/assets/sync_app/js/sync_buttons.js"
 # 		"pos_streaming.tasks.daily"
 #  	],
 #     "hourly": [
-#         "sync_app.api.sync_all('Sales Invoice')",
-#         "sync_app.api.sync_all('POS Opening Shift')",
-#         "sync_app.api.sync_all('POS Closing Shift')"
+#         "pos_streaming.api.sync_all('Sales Invoice')",
+#         "pos_streaming.api.sync_all('POS Opening Shift')",
+#         "pos_streaming.api.sync_all('POS Closing Shift')"
 # 	],
 #  	"weekly": [
 # 		"pos_streaming.tasks.weekly"
@@ -174,9 +174,9 @@ app_include_js = "/assets/sync_app/js/sync_buttons.js"
 # }
 scheduler_events = {
     "hourly": [
-        "sync_app.sync_app.api.sync_all('Sales Invoice')",
-        "sync_app.sync_app.api.sync_all('POS Opening Shift')",
-        "sync_app.sync_app.api.sync_all('POS Closing Shift')"
+        "pos_streaming.pos_streaming.api.sync_all('Sales Invoice')",
+        "pos_streaming.pos_streaming.api.sync_all('POS Opening Shift')",
+        "pos_streaming.pos_streaming.api.sync_all('POS Closing Shift')"
 	],
 }
 
