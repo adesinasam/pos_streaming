@@ -45,11 +45,11 @@ app_license = "mit"
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {
-    "Sales Invoice": "public/js/sync_buttons.js",
+    "Sales Invoice": "public/js/sync_button_to.js",
+    "Item": "public/js/sync_button_from.js",
 	}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
-app_include_js = "/assets/pos_streaming/js/sync_buttons.js"
 
 
 # Svg Icons
@@ -88,6 +88,9 @@ app_include_js = "/assets/pos_streaming/js/sync_buttons.js"
 
 # before_install = "pos_streaming.install.before_install"
 # after_install = "pos_streaming.install.after_install"
+patches = [
+    "pos_streaming.pos_streaming.patches.add_sync_status"
+]
 
 # Uninstallation
 # ------------
@@ -171,10 +174,10 @@ app_include_js = "/assets/pos_streaming/js/sync_buttons.js"
 # }
 scheduler_events = {
     "hourly": [
-        "pos_streaming.pos_streaming.api.sync_all"
+        "pos_streaming.pos_streaming.api.remote_sync.sync_to_remote",
+        "pos_streaming.pos_streaming.api.remote_sync.sync_from_remote",
     ]
 }
-
 
 # Testing
 # -------
