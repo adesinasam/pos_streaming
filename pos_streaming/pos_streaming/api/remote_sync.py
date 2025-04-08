@@ -29,7 +29,7 @@ def call_remote(path, method='GET', data=None, params=None):
 # 1. Push from Local → Remote
 
 def push_docs(doctype, filters=None):
-    filters = filters or { 'sync_status': 0 }
+    filters = filters or { 'custom_synced': 0 }
     docs = frappe.get_all(doctype, filters=filters, fields='*')
     for doc in docs:
         data = doc.copy()
@@ -42,7 +42,7 @@ def push_docs(doctype, filters=None):
         except Exception as e:
             logger.error(f"Failed to push {doctype} {doc.name}: {e}")
             continue
-        frappe.db.set_value(doctype, doc.name, 'sync_status', 1)
+        frappe.db.set_value(doctype, doc.name, 'custom_synced', 1)
     frappe.db.commit()
 
 # 2. Pull from Remote → Local (using last updated)
@@ -72,10 +72,12 @@ def pull_docs(doctype, key_field='name', modified_filter=True):
 
 # Wrapper functions
 
+@frappe.whitelist()
 def sync_to_remote():
     for dt in ["Sales Invoice", "POS Opening Shift", "POS Closing Shift"]:
         push_docs(dt)
 
+@frappe.whitelist()
 def sync_from_remote():
     for dt in ["Item", "Item Price", "Price List", "POS Profile"]:
         pull_docs(dt)
