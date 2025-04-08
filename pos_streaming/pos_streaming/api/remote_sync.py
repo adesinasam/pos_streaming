@@ -49,7 +49,7 @@ def push_docs(doctype, filters=None):
 
 def pull_docs(doctype, key_field='name', modified_filter=True):
     field_key = f'last_pull_{doctype.replace(" ", "_").lower()}'
-    last_sync_time = frappe.db.get_single_value('System Settings', field_key, default='1970-01-01 00:00:00')
+    last_sync_time = frappe.db.get_single_value('System Settings', field_key) or '1970-01-01 00:00:00'
 
     filters = [["modified", ">", last_sync_time]] if modified_filter else []
 
