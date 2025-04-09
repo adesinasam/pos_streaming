@@ -88,9 +88,6 @@ doctype_list_js = {
 
 # before_install = "pos_streaming.install.before_install"
 # after_install = "pos_streaming.install.after_install"
-patches = [
-    "pos_streaming.pos_streaming.patches.add_sync_status"
-]
 
 # Uninstallation
 # ------------
