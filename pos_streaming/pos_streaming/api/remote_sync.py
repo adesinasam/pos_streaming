@@ -57,7 +57,8 @@ def pull_docs(doctype):
     # filters = [["modified", ">", last_sync_time]] if modified_filter else []
 
     try:
-        docs = call_remote(doctype, params={"filters": [["modified", ">", last_sync_time]]})
+        filters = json.dumps([["modified", ">", last_sync_time]])
+        docs = call_remote(doctype, params={"filters": filters})
         pulled = 0
 
         for d in docs:
