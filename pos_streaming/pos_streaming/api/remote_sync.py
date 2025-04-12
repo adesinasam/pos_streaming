@@ -5,9 +5,13 @@ from frappe.utils import get_request_site_address
 
 logger = frappe.logger("pos_streaming")
 
-REMOTE_URL = frappe.conf.get('remote_url')
-API_KEY = frappe.conf.get('remote_api_key')
-API_SECRET = frappe.conf.get('remote_api_secret')
+# REMOTE_URL = frappe.conf.get('remote_url')
+# API_KEY = frappe.conf.get('remote_api_key')
+# API_SECRET = frappe.conf.get('remote_api_secret')
+
+REMOTE_URL = frappe.get_secret('remote_url')
+API_KEY = frappe.get_secret('remote_api_key')
+API_SECRET = frappe.get_secret('remote_api_secret')
 
 headers = {
     'Content-Type': 'application/json'
@@ -29,7 +33,7 @@ def call_remote(path, method='GET', data=None, params=None):
 # 1. Push from Local → Remote
 
 def push_docs(doctype, filters=None):
-    filters = filters or { 'custom_synced': 0 }
+    filters = filters or { 'sync_status': 0 }
     docs = frappe.get_all(doctype, filters=filters, fields='*')
     for doc in docs:
         data = doc.copy()
@@ -42,14 +46,16 @@ def push_docs(doctype, filters=None):
         except Exception as e:
             logger.error(f"Failed to push {doctype} {doc.name}: {e}")
             continue
-        frappe.db.set_value(doctype, doc.name, 'custom_synced', 1)
+        frappe.db.set_value(doctype, doc.name, 'sync_status', 1)
     frappe.db.commit()
 
 # 2. Pull from Remote → Local (using last updated)
 
 def pull_docs(doctype, key_field='name', modified_filter=True):
     field_key = f'last_pull_{doctype.replace(" ", "_").lower()}'
-    last_sync_time = frappe.db.get_single_value('System Settings', field_key) or '1970-01-01 00:00:00'
+    last_sync_time = frappe.db.get_single_value('System Settings', field_key)
+    if not last_sync_time:
+        last_sync_time = '2025-01-01 00:00:00'
 
     filters = [["modified", ">", last_sync_time]] if modified_filter else []
 

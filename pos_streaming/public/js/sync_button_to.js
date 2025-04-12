@@ -1,7 +1,7 @@
 frappe.listview_settings['Sales Invoice'] = {
-    add_fields: ['custom_synced'],
+    add_fields: ['sync_status'],
     get_indicator: function(doc) {
-        return doc.custom_synced ? [__('Synced'), 'green'] : [__('Unsynced'), 'orange'];
+        return doc.sync_status ? [__('Synced'), 'green'] : [__('Unsynced'), 'orange'];
     },
     onload: function(listview) {
         listview.page.add_menu_item(__('Sync Unsynced'), function() {

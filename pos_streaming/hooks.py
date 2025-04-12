@@ -171,7 +171,7 @@ doctype_list_js = {
 # }
 scheduler_events = {
     "hourly": [
-        "pos_streaming.pos_streaming.api.remote_sync.sync_to_remote",
+        # "pos_streaming.pos_streaming.api.remote_sync.sync_to_remote",
         "pos_streaming.pos_streaming.api.remote_sync.sync_from_remote",
     ]
 }

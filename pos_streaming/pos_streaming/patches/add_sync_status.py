@@ -9,5 +9,6 @@ def execute():
                 "label": "Synced",
                 "fieldname": "sync_status",
                 "fieldtype": "Check",
-                "default": 0
+                "default": 1,
+                "insert_after": "naming_series"
             }).insert(ignore_permissions=True)
