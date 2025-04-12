@@ -48,30 +48,65 @@ def push_docs(doctype, filters=None):
 
 # 2. Pull from Remote → Local (using last updated)
 
-def pull_docs(doctype, key_field='name', modified_filter=True):
-    field_key = f'last_pull_{doctype.replace(" ", "_").lower()}'
+def pull_docs(doctype):
+    field_key = f"last_pull_{doctype.lower().replace(' ', '_')}"
     last_sync_time = frappe.db.get_single_value('System Settings', field_key)
     if not last_sync_time:
         last_sync_time = '2025-01-01 00:00:00'
 
-    filters = [["modified", ">", last_sync_time]] if modified_filter else []
+    # filters = [["modified", ">", last_sync_time]] if modified_filter else []
 
     try:
-        remote_list = call_remote(doctype, params={"filters": filters})
-        for remote in remote_list:
-            name = remote[key_field]
+        docs = call_remote(doctype, params={"filters": [["modified", ">", last_sync_time]]})
+        pulled = 0
+
+        for d in docs:
+            d.pop("name", None)
             try:
-                doc = frappe.get_doc(doctype, name)
-                for k, v in remote.items():
-                    doc.set(k, v)
-                doc.save(ignore_permissions=True)
-            except frappe.DoesNotExistError:
-                new_doc = frappe.get_doc({"doctype": doctype, **remote})
-                new_doc.insert(ignore_permissions=True)
-        frappe.db.set_value('System Settings', None, field_key, frappe.utils.now())
-        frappe.db.commit()
+                doc = frappe.get_doc({**d, "doctype": doctype})
+                doc.insert(ignore_permissions=True, ignore_if_duplicate=True)
+                pulled += 1
+
+                # Log successful sync
+                frappe.get_doc({
+                    "doctype": "Sync Log",
+                    "direction": "Pull",
+                    "doctype_name": doctype,
+                    "docname": doc.name,
+                    "status": "Success",
+                    "message": f"Pulled and inserted."
+                }).insert(ignore_permissions=True)
+
+            except Exception as e:
+                frappe.get_doc({
+                    "doctype": "Sync Log",
+                    "direction": "Pull",
+                    "doctype_name": doctype,
+                    "docname": d.get("name", "UNKNOWN"),
+                    "status": "Failed",
+                    "message": str(e),
+                    "traceback": frappe.get_traceback()
+                }).insert(ignore_permissions=True)
+
+        # update sync timestamp
+        if pulled > 0:
+            ss = frappe.get_single("System Settings")
+            setattr(ss, field_key, now())
+            ss.save(ignore_permissions=True)
+
+        frappe.msgprint(f"Pulled {pulled} {doctype}(s) from remote.")
+
     except Exception as e:
-        logger.error(f"Pull failed for {doctype}: {e}")
+        # Catch entire pull failure
+        frappe.get_doc({
+            "doctype": "Sync Log",
+            "direction": "Pull",
+            "doctype_name": doctype,
+            "docname": "N/A",
+            "status": "Failed",
+            "message": str(e),
+            "traceback": frappe.get_traceback()
+        }).insert(ignore_permissions=True)
 
 # Wrapper functions
 
