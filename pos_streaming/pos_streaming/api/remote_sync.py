@@ -2,7 +2,7 @@ import frappe
 import requests
 import logging
 from frappe.utils import get_request_site_address
-from frappe.secrets import get as get_secret
+from frappe.core.doctype.secrets_manager.secrets_manager import get_secret
 
 logger = frappe.logger("pos_streaming")
 
