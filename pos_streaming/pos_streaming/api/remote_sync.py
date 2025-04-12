@@ -2,17 +2,13 @@ import frappe
 import requests
 import logging
 from frappe.utils import get_request_site_address
-from frappe.core.doctype.secrets_manager.secrets_manager import get_secret
 
 logger = frappe.logger("pos_streaming")
 
-# REMOTE_URL = frappe.conf.get('remote_url')
-# API_KEY = frappe.conf.get('remote_api_key')
-# API_SECRET = frappe.conf.get('remote_api_secret')
+REMOTE_URL = frappe.conf.get('remote_url')
+API_KEY = frappe.conf.get('remote_api_key')
+API_SECRET = frappe.conf.get('remote_api_secret')
 
-REMOTE_URL = get_secret('remote_url')
-API_KEY = get_secret('remote_api_key')
-API_SECRET = get_secret('remote_api_secret')
 
 headers = {
     'Content-Type': 'application/json'
