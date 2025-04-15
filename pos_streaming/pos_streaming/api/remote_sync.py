@@ -17,11 +17,34 @@ headers = {
 
 # Helper to call remote REST API
 
+# def call_remote(path, method='GET', data=None, params=None):
+#     url = f"{REMOTE_URL}/api/resource/{path}"
+#     auth = (API_KEY, API_SECRET)
+#     try:
+#         response = requests.request(method, url, auth=auth, json=data, params=params, headers=headers, timeout=30)
+#         response.raise_for_status()
+#         return response.json().get('data')
+#     except Exception as e:
+#         logger.error(f"Remote call failed: {e}")
+#         raise
 def call_remote(path, method='GET', data=None, params=None):
     url = f"{REMOTE_URL}/api/resource/{path}"
     auth = (API_KEY, API_SECRET)
+
+    # Ensure filters are properly JSON-encoded
+    if params and "filters" in params:
+        params["filters"] = json.dumps(params["filters"])
+
     try:
-        response = requests.request(method, url, auth=auth, json=data, params=params, headers=headers, timeout=30)
+        response = requests.request(
+            method,
+            url,
+            auth=auth,
+            json=data,
+            params=params,
+            headers=headers,
+            timeout=30
+        )
         response.raise_for_status()
         return response.json().get('data')
     except Exception as e:
